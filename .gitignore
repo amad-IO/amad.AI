@@ -1,0 +1,9 @@
+# API Key - jangan di-push!
+key.txt
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
