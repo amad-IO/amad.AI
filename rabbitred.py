@@ -182,9 +182,14 @@ def save_key_to_file(key):
 
 def map_openrouter_error(status, data):
     if isinstance(data, dict):
-        msg = data.get("error") or data.get("message") or str(data)
+        err = data.get("error")
+        if isinstance(err, dict):
+            msg = err.get("message") or str(err)
+        else:
+            msg = err or data.get("message") or str(data)
     else:
         msg = str(data)
+    msg = str(msg)
     if status == 401:
         return "API key invalid or unauthorized."
     if status == 429:
@@ -404,7 +409,7 @@ def send_message_streaming(user_text):
     conversation_history.append({"role": "user", "content": user_text})
     maybe_summarize_long_history()
     messages = build_chat_messages()
-    result = call_openrouter_stream(messages, TEMPERATURE, 4096)
+    result = call_openrouter_stream(messages, TEMPERATURE, 1500)
     if "error" in result and result["error"]:
         err = RED + "Error: " + result["error"] + NRM
         print(err)
